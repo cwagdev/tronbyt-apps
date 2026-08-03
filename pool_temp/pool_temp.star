@@ -10,7 +10,7 @@ load("render.star", "render")
 load("http.star", "http")
 load("time.star", "time")
 
-DATA_URL = "http://api.chriswagner.com/poolTempHistory"
+DATA_URL = "http://192.168.1.2:1880/poolTempHistory"
 TTL_SECONDS = 300  # refresh ~5 min
 WINDOW = 24 * 60 * 60  # 24 hours in seconds
 
