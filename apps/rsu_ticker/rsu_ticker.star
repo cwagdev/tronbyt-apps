@@ -33,12 +33,25 @@ DEFAULT_GRANT_DATE = "2024-01-01T00:00:00Z"
 VEST_INTERVAL_MONTHS = 6
 VEST_COUNT = 8  # every 6 months over 4 years
 
+def with_commas(digits):
+    """Insert thousands-separator commas into a digit string."""
+    groups = []
+    remaining = digits
+    for _ in range(len(digits)):
+        if len(remaining) <= 3:
+            groups.append(remaining)
+            break
+        groups.append(remaining[-3:])
+        remaining = remaining[:-3]
+    return ",".join(groups[::-1])
+
 def format_num(n):
-    """Format a float with one decimal place (no %.1f in Starlark)."""
+    """Format a float with one decimal place and thousands commas
+    (no %.1f in Starlark)."""
     sign = "-" if n < 0 else ""
     a = -n if n < 0 else n
     tenths = int(a * 10 + 0.5)
-    return "%s%d.%d" % (sign, tenths // 10, tenths % 10)
+    return "%s%s.%d" % (sign, with_commas(str(tenths // 10)), tenths % 10)
 
 def format_pct(pct):
     """Format a percentage change compactly, e.g. '+53.8%' or '-7.0%'."""
